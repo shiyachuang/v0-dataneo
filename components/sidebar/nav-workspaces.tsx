@@ -4,13 +4,13 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  Folder,
-  FolderOpen,
-  MoreHorizontal,
-  Plus,
-  Trash2,
-  ChevronRight,
-} from 'lucide-react'
+  IconFolder,
+  IconFolderOpen,
+  IconDots,
+  IconPlus,
+  IconTrash,
+  IconChevronRight,
+} from '@tabler/icons-react'
 import { Workspace } from '@/lib/types'
 import {
   SidebarGroup,
@@ -81,7 +81,7 @@ export function NavWorkspaces({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton onClick={onCreateWorkspace}>
-                <Plus className="h-4 w-4" />
+                <IconPlus className="h-4 w-4" />
                 <span>创建工作区</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -96,7 +96,7 @@ export function NavWorkspaces({
       <SidebarGroupLabel>
         <span>工作区</span>
         <SidebarMenuAction onClick={onCreateWorkspace} className="ml-auto">
-          <Plus className="h-4 w-4" />
+          <IconPlus className="h-4 w-4" />
           <span className="sr-only">创建工作区</span>
         </SidebarMenuAction>
       </SidebarGroupLabel>
@@ -116,16 +116,16 @@ export function NavWorkspaces({
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton asChild isActive={isActive}>
                       <div className="flex items-center gap-2 cursor-pointer">
-                        <ChevronRight
+                        <IconChevronRight
                           className={cn(
                             'h-4 w-4 shrink-0 transition-transform',
                             isOpen && 'rotate-90'
                           )}
                         />
                         {isOpen ? (
-                          <FolderOpen className="h-4 w-4 shrink-0" />
+                          <IconFolderOpen className="h-4 w-4 shrink-0" color="#DFAA57" />
                         ) : (
-                          <Folder className="h-4 w-4 shrink-0" />
+                          <IconFolder className="h-4 w-4 shrink-0"  color="#DFAA57"/>
                         )}
                         <span className="truncate">{workspace.name}</span>
                       </div>
@@ -138,7 +138,7 @@ export function NavWorkspaces({
                         className="opacity-0 group-hover/workspace-item:opacity-100 data-[state=open]:opacity-100"
                         showOnHover
                       >
-                        <MoreHorizontal className="h-4 w-4" />
+                        <IconDots className="h-4 w-4" />
                         <span className="sr-only">更多操作</span>
                       </SidebarMenuAction>
                     </DropdownMenuTrigger>
@@ -147,7 +147,7 @@ export function NavWorkspaces({
                         onClick={(e) => handleDelete(workspace.id, e)}
                         className="text-destructive focus:text-destructive"
                       >
-                        <Trash2 className="mr-2 h-4 w-4" />
+                        <IconTrash className="mr-2 h-4 w-4" />
                         删除工作区
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -163,7 +163,7 @@ export function NavWorkspaces({
                             <SidebarMenuSubItem key={item.id}>
                               <SidebarMenuSubButton asChild isActive={isSubActive}>
                                 <Link href={item.url}>
-                                  <MoreHorizontal className="h-4 w-4" />
+                                  <IconDots className="h-4 w-4" />
                                   <span className="truncate">{item.name}</span>
                                 </Link>
                               </SidebarMenuSubButton>

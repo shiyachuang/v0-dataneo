@@ -3,11 +3,11 @@
 import React from 'react'
 import Link from 'next/link'
 import {
-  ChevronsUpDown,
-  LogOut,
-  Settings,
-  User as UserIcon,
-} from 'lucide-react'
+  IconSelector,
+  IconLogout,
+  IconSettings,
+  IconUser,
+} from '@tabler/icons-react'
 import { User } from '@/lib/types'
 import {
   Avatar,
@@ -61,7 +61,7 @@ export function NavUser({ user, onLogout }: NavUserProps) {
                   {user.email}
                 </span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <IconSelector className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -89,13 +89,13 @@ export function NavUser({ user, onLogout }: NavUserProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/settings/account" className="cursor-pointer">
-                <UserIcon className="mr-2 h-4 w-4" />
+                <IconUser className="mr-2 h-4 w-4" />
                 账户设置
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/settings" className="cursor-pointer">
-                <Settings className="mr-2 h-4 w-4" />
+                <IconSettings className="mr-2 h-4 w-4" />
                 设置
               </Link>
             </DropdownMenuItem>
@@ -104,7 +104,7 @@ export function NavUser({ user, onLogout }: NavUserProps) {
               onClick={handleLogout}
               className="text-destructive focus:text-destructive cursor-pointer"
             >
-              <LogOut className="mr-2 h-4 w-4" />
+              <IconLogout className="mr-2 h-4 w-4" />
               退出登录
             </DropdownMenuItem>
           </DropdownMenuContent>

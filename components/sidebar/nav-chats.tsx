@@ -1,12 +1,12 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
+import { useRouter, usePathname } from 'next/navigation'
+import { IconDots } from '@tabler/icons-react'
 import { Chat } from '@/lib/types'
 import {
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuItem,
@@ -19,7 +19,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { cn } from '@/lib/utils'
 
 interface NavChatsProps {
   chats: Chat[]
@@ -28,6 +27,7 @@ interface NavChatsProps {
 }
 
 export function NavChats({ chats, onDelete, onRename }: NavChatsProps) {
+  const router = useRouter()
   const pathname = usePathname()
 
   const handleDelete = (chatId: string, e: React.MouseEvent) => {
@@ -52,43 +52,40 @@ export function NavChats({ chats, onDelete, onRename }: NavChatsProps) {
   }
 
   return (
-    <SidebarGroup>
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden min-h-[100px] pl-4 py-0">
+      <SidebarGroupLabel>对话</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {chats.map((chat) => {
             const isActive = pathname === chat.url || pathname.startsWith(chat.url + '/')
 
             return (
-              <SidebarMenuItem key={chat.id} className="group/chat-item">
-                <SidebarMenuButton asChild isActive={isActive}>
-                  <Link href={chat.url} className="flex items-center gap-2">
-                    <MoreHorizontal className="h-4 w-4 shrink-0" />
+              <SidebarMenuItem key={chat.id}>
+                <SidebarMenuButton
+                  onClick={() => router.push(chat.url)}
+                  asChild
+                  isActive={isActive}
+                >
+                  <span className="flex items-center gap-2 cursor-pointer" title={chat.name}>
                     <span className="truncate">{chat.name}</span>
-                  </Link>
+                  </span>
                 </SidebarMenuButton>
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <SidebarMenuAction
-                      className="opacity-0 group-hover/chat-item:opacity-100 data-[state=open]:opacity-100"
-                      showOnHover
-                    >
-                      <MoreHorizontal className="h-4 w-4" />
+                    <SidebarMenuAction showOnHover>
+                      <IconDots className="h-4 w-4" />
                       <span className="sr-only">更多操作</span>
                     </SidebarMenuAction>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent side="right" align="start">
-                    <DropdownMenuItem
-                      onClick={(e) => handleRename(chat.id, chat.name, e)}
-                    >
-                      <Pencil className="mr-2 h-4 w-4" />
+                    <DropdownMenuItem onClick={(e) => handleRename(chat.id, chat.name, e)}>
                       重命名
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={(e) => handleDelete(chat.id, e)}
-                      className="text-destructive focus:text-destructive"
+                      className="text-foreground"
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
                       删除
                     </DropdownMenuItem>
                   </DropdownMenuContent>

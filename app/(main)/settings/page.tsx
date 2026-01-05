@@ -1,32 +1,44 @@
 'use client'
 
-import React from 'react'
-import { User, Bell, Shield, Palette } from 'lucide-react'
+import * as React from 'react'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
+import { AccountSettings } from './components/account-settings'
+import { AppearanceSettings } from './components/appearance-settings'
+import { AboutSettings } from './components/about-settings'
 
-const settingSections = [
+const settingTabs = [
   {
-    title: '账户设置',
-    icon: User,
-    description: '管理你的账户信息和偏好设置'
+    id: 'account',
+    title: '账户',
   },
   {
-    title: '通知设置',
-    icon: Bell,
-    description: '配置通知和提醒选项'
+    id: 'appearance',
+    title: '外观',
   },
   {
-    title: '安全与隐私',
-    icon: Shield,
-    description: '管理密码、权限和隐私设置'
-  },
-  {
-    title: '外观设置',
-    icon: Palette,
-    description: '自定义界面主题和显示选项'
+    id: 'about',
+    title: '关于',
   },
 ]
 
 export default function SettingsPage() {
+  const [activeTab, setActiveTab] = React.useState('account')
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'account':
+        return <AccountSettings />
+      case 'appearance':
+        return <AppearanceSettings />
+      case 'about':
+        return <AboutSettings />
+      default:
+        return <AccountSettings />
+    }
+  }
+
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
@@ -35,24 +47,35 @@ export default function SettingsPage() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto p-6">
-        <div className="max-w-3xl space-y-4">
-          {settingSections.map((section, index) => (
-            <div
-              key={index}
-              className="flex items-start gap-4 rounded-lg border p-6 hover:bg-accent cursor-pointer transition-colors"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
-                <section.icon className="h-6 w-6 text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold mb-1">{section.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {section.description}
-                </p>
-              </div>
+      <div className="flex-1 overflow-hidden">
+        <div className="flex h-full">
+          {/* Sidebar */}
+          <aside className="w-[240px] border-r p-4">
+            <nav className="flex flex-col space-y-1">
+              {settingTabs.map((tab) => (
+                <Button
+                  key={tab.id}
+                  variant="ghost"
+                  className={cn(
+                    activeTab === tab.id
+                      ? 'bg-muted hover:bg-muted font-semibold'
+                      : 'hover:bg-muted font-normal',
+                    'justify-start'
+                  )}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  {tab.title}
+                </Button>
+              ))}
+            </nav>
+          </aside>
+
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="max-w-[800px]">
+              {renderTabContent()}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>

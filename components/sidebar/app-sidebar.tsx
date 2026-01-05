@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { MessageSquarePlus } from 'lucide-react'
+import { IconMessageCirclePlus, IconDots } from '@tabler/icons-react'
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { NavChats } from './nav-chats'
 import { NavWorkspaces } from './nav-workspaces'
 import { NavUser } from './nav-user'
+import { NavMenus } from './nav-menus'
 import { chatService, userService } from '@/lib/mock/services'
 import { Chat, Workspace, User } from '@/lib/types'
 import { toast } from 'sonner'
@@ -137,28 +138,28 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       {/* Header */}
-      <SidebarHeader className="border-b px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
+      <SidebarHeader className="pl-6 group-data-[collapsible=icon]:pl-1">
+        <div className="py-1.5 pr-2 flex items-center">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
             DN
           </div>
-          <span className="font-semibold text-lg group-data-[collapsible=icon]:hidden">
-            DataNeo AI
+          <span className="text-xl group-data-[collapsible=icon]:hidden font-bold pl-2.5">
+            DataNeo
           </span>
         </div>
       </SidebarHeader>
 
       {/* Content */}
-      <SidebarContent className="gap-2">
+      <SidebarContent className="gap-1">
         {/* New Chat Button */}
-        <div className="px-2 group-data-[collapsible=icon]:px-2">
+        <div className="px-2 group-data-[collapsible=icon]:hidden">
           <Button
             variant="outline"
-            className="w-full justify-start gap-2"
+            className="w-full justify-start gap-2 border-0 shadow-none bg-transparent font-semibold"
             onClick={handleNewChat}
           >
-            <MessageSquarePlus className="h-4 w-4" />
-            <span className="group-data-[collapsible=icon]:hidden">新建对话</span>
+            <IconMessageCirclePlus className="h-4 w-4 text-primary" />
+            开始新对话
           </Button>
         </div>
 
@@ -171,14 +172,14 @@ export function AppSidebar() {
           />
 
           {hasMoreChats && (
-            <div className="px-2 py-2 group-data-[collapsible=icon]:hidden">
+            <div className="px-2 pl-4 group-data-[collapsible=icon]:hidden mb-6">
               <Button
                 variant="ghost"
-                size="sm"
-                className="w-full justify-start text-muted-foreground"
+                className="w-full justify-start text-sm text-sidebar-foreground/70 hover:text-foreground h-8"
                 onClick={loadMoreChats}
               >
-                加载更多...
+                <IconDots className="h-3 w-3 mr-2" />
+                更多
               </Button>
             </div>
           )}
@@ -194,7 +195,8 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter className="border-t">
+      <SidebarFooter className="mt-7">
+        <NavMenus />
         {user && <NavUser user={user} onLogout={handleLogout} />}
       </SidebarFooter>
     </Sidebar>
