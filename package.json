@@ -48,7 +48,6 @@
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
     "embla-carousel-react": "8.5.1",
-    "immer": "latest",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "nanoid": "^5.0.4",
@@ -63,7 +62,6 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "tw-animate-css": "latest",
     "use-immer": "^0.11.0",
     "vaul": "^1.1.2",
     "zod": "3.25.76"
