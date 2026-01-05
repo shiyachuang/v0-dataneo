@@ -1,49 +1,147 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { BookOpen, FolderOpen } from 'lucide-react'
+import React, { useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import {
+  BookOpenText,
+  EllipsisVertical,
+} from "lucide-react";
+import { useImmer } from "use-immer";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const mockKnowledgeBases = [
-  { id: 1, name: '产品知识库', documents: 45, updated: '2024-01-04' },
-  { id: 2, name: '技术文档', documents: 128, updated: '2024-01-03' },
-  { id: 3, name: '常见问题', documents: 67, updated: '2024-01-02' },
-  { id: 4, name: '操作手册', documents: 32, updated: '2024-01-01' },
-]
+interface KnowledgeBase {
+  id: string;
+  name: string;
+}
+
+interface State {
+  showKnowledgeDialog: boolean;
+  knowledgeBases: KnowledgeBase[];
+  open: boolean;
+  deleteKnowledgeDialog: KnowledgeBase | null;
+  renameKnowledgeDialog: KnowledgeBase | null;
+}
 
 export default function KnowledgeBasePage() {
-  return (
-    <div className="flex h-full flex-col">
-      {/* Header */}
-      <div className="flex h-16 items-center border-b px-6">
-        <h1 className="text-xl font-semibold">知识库</h1>
-      </div>
+  const router = useRouter();
+  const [state, setState] = useImmer<State>({
+    showKnowledgeDialog: false,
+    knowledgeBases: [],
+    open: false,
+    deleteKnowledgeDialog: null,
+    renameKnowledgeDialog: null,
+  });
 
-      {/* Content */}
-      <div className="flex-1 overflow-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockKnowledgeBases.map((kb) => (
-            <div
-              key={kb.id}
-              className="rounded-lg border p-6 hover:bg-accent cursor-pointer transition-colors"
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
-                  <FolderOpen className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold mb-2">{kb.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {kb.documents} 个文档
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    更新于 {kb.updated}
-                  </p>
-                </div>
-              </div>
+  const openKnowledgeDialog = () => {
+    setState((draft) => {
+      draft.showKnowledgeDialog = true;
+    });
+  };
+
+  const goToKnowledgeList = (item: KnowledgeBase) => {
+    router.push(`/knowledge-base/list/${item.id}`);
+  };
+
+  // 模拟数据
+  const mockKnowledgeBases = [
+    { id: "1", name: "产品知识库" },
+    { id: "2", name: "技术文档" },
+    { id: "3", name: "常见问题" },
+    { id: "4", name: "业务流程" },
+    { id: "5", name: "数据模型" },
+    { id: "6", name: "分析指标" },
+  ];
+
+  useEffect(() => {
+    setState((draft) => {
+      draft.knowledgeBases = mockKnowledgeBases;
+      draft.open = mockKnowledgeBases.length === 0;
+    });
+  }, []);
+
+  const KnowledgeCard = ({ kb }: { kb: KnowledgeBase }) => (
+    <div
+      onClick={() => goToKnowledgeList(kb)}
+      className="relative p-6 border border-[#E4E4E7] dark:border-[#27272A] rounded-[6px] hover:bg-[#F4F4F5] dark:hover:bg-[#303033] transition-colors cursor-pointer bg-white dark:bg-[#1D1D20] h-full group"
+    >
+      <div className="flex items-center justify-center gap-3 mb-2 w-[36px] h-[36px] bg-[#F1F1F1] dark:bg-[#979797] rounded-[50%]">
+        <BookOpenText className="w-5 h-5 text-primary" />
+      </div>
+      <div className="text-[16px] break-words line-clamp-3" title={kb.name}>
+        {kb.name}
+      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute w-[24px] h-[24px] top-2 right-2 hover:bg-[#E9E9ED] dark:hover:bg-[#979797] opacity-0 group-hover:opacity-100 transition-opacity data-[state=open]:opacity-100"
+          >
+            <EllipsisVertical className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="bottom" align="start">
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setState((draft) => {
+                draft.renameKnowledgeDialog = kb;
+              });
+            }}
+            className="cursor-pointer"
+          >
+            重命名
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setState((draft) => {
+                draft.deleteKnowledgeDialog = kb;
+              });
+            }}
+            className="cursor-pointer"
+          >
+            删除
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+
+  return (
+    <div className="flex bg-background h-full">
+      <div className="flex-1 overflow-auto h-full p-6">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-semibold">知识库</h1>
+          <Button
+            variant="default"
+            className="h-8"
+            onClick={openKnowledgeDialog}
+          >
+            新建知识库
+          </Button>
+        </div>
+        <div className="h-[calc(100vh-160px)] overflow-auto">
+          {state.knowledgeBases.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {state.knowledgeBases.map((kb) => (
+                <KnowledgeCard key={kb.id} kb={kb} />
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              暂无知识库，创建一个开始吧！
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
