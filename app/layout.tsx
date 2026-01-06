@@ -1,18 +1,15 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: '--font-geist'
-});
+const _geist = Geist({ subsets: ["latin"] });
+const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'DataNeo AI',
-  description: 'AI-powered data analysis platform',
+  title: 'v0 App',
+  description: 'Created with v0',
+  generator: 'v0.app',
   icons: {
     icon: [
       {
@@ -23,9 +20,13 @@ export const metadata: Metadata = {
         url: '/icon-dark-32x32.png',
         media: '(prefers-color-scheme: dark)',
       },
+      {
+        url: '/icon.svg',
+        type: 'image/svg+xml',
+      },
     ],
+    apple: '/apple-icon.png',
   },
-    generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -34,18 +35,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
-      <body className={`${geist.variable} font-sans antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-          <Analytics />
-        </ThemeProvider>
+    <html lang="en">
+      <body className={`font-sans antialiased`}>
+        {children}
+        <Analytics />
       </body>
     </html>
   )

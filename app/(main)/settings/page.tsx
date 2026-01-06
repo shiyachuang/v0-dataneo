@@ -4,15 +4,10 @@ import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
-import { AccountSettings } from './components/account-settings'
 import { AppearanceSettings } from './components/appearance-settings'
 import { AboutSettings } from './components/about-settings'
 
 const settingTabs = [
-  {
-    id: 'account',
-    title: '账户',
-  },
   {
     id: 'appearance',
     title: '外观',
@@ -24,18 +19,16 @@ const settingTabs = [
 ]
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = React.useState('account')
+  const [activeTab, setActiveTab] = React.useState('appearance')
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'account':
-        return <AccountSettings />
       case 'appearance':
         return <AppearanceSettings />
       case 'about':
         return <AboutSettings />
       default:
-        return <AccountSettings />
+        return <AppearanceSettings />
     }
   }
 
