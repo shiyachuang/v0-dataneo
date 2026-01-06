@@ -107,3 +107,18 @@
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--border)) transparent;
 }
+
+/* Message highlight animation */
+@keyframes highlight-pulse {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: hsl(var(--primary) / 0.1);
+  }
+}
+
+.highlight-message {
+  animation: highlight-pulse 1s ease-in-out 2;
+  border-radius: 8px;
+}

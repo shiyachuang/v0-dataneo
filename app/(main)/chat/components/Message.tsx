@@ -312,7 +312,8 @@ export default function Message({ message, onRetry }: MessageProps) {
 
   return (
     <div
-      className="message-item max-w-[848px] px-4 pb-2 mx-auto relative"
+      id={message.id}
+      className="message-item max-w-[848px] px-4 pb-2 mx-auto relative transition-colors"
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
     >

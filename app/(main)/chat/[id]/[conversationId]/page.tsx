@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import Message from "../../components/Message";
 import ChatInput from "../../components/ChatInput";
+import ResourcePanel from "../../components/ResourcePanel";
 import {
   mockMessages,
   generateMockResponse,
@@ -105,6 +106,9 @@ export default function WorkspaceConversationPage({
   return (
     <div className="bg-background h-[calc(100vh)] flex fixed top-0 right-0 bottom-0 left-[240px]">
       <div className="flex flex-1 flex-col h-[calc(100vh-64px)] mt-[64px] relative">
+        {/* 资源面板 */}
+        <ResourcePanel messages={messages} />
+
         {/* 消息滚动区域 */}
         <div
           ref={scrollRef}
