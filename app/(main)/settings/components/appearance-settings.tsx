@@ -9,12 +9,48 @@ import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react'
 
 const themeColors = [
-  { name: 'green', label: '绿色', color: 'hsl(142.1 76.2% 36.3%)' },
-  { name: 'blue', label: '蓝色', color: 'hsl(221.2 83.2% 53.3%)' },
-  { name: 'violet', label: '紫色', color: 'hsl(262.1 83.3% 57.8%)' },
-  { name: 'orange', label: '橙色', color: 'hsl(24.6 95% 53.1%)' },
-  { name: 'red', label: '红色', color: 'hsl(0 72.2% 50.6%)' },
-  { name: 'rose', label: '玫红', color: 'hsl(346.8 77.2% 49.8%)' },
+  {
+    name: 'green',
+    label: '绿色',
+    color: 'hsl(142.1 76.2% 36.3%)',
+    primaryLight: '142.1 76.2% 36.3%',
+    primaryDark: '142.1 70.6% 45.3%'
+  },
+  {
+    name: 'blue',
+    label: '蓝色',
+    color: 'hsl(221.2 83.2% 53.3%)',
+    primaryLight: '221.2 83.2% 53.3%',
+    primaryDark: '217.2 91.2% 59.8%'
+  },
+  {
+    name: 'violet',
+    label: '紫色',
+    color: 'hsl(262.1 83.3% 57.8%)',
+    primaryLight: '262.1 83.3% 57.8%',
+    primaryDark: '263.4 70% 50.4%'
+  },
+  {
+    name: 'orange',
+    label: '橙色',
+    color: 'hsl(24.6 95% 53.1%)',
+    primaryLight: '24.6 95% 53.1%',
+    primaryDark: '20.5 90.2% 48.2%'
+  },
+  {
+    name: 'red',
+    label: '红色',
+    color: 'hsl(0 72.2% 50.6%)',
+    primaryLight: '0 72.2% 50.6%',
+    primaryDark: '0 72.2% 50.6%'
+  },
+  {
+    name: 'rose',
+    label: '玫红',
+    color: 'hsl(346.8 77.2% 49.8%)',
+    primaryLight: '346.8 77.2% 49.8%',
+    primaryDark: '346.8 77.2% 49.8%'
+  },
 ]
 
 export function AppearanceSettings() {
@@ -26,18 +62,62 @@ export function AppearanceSettings() {
     setMounted(true)
     const savedColor = localStorage.getItem('theme-color') || 'green'
     setSelectedColor(savedColor)
+
+    // 应用保存的颜色
+    const selectedTheme = themeColors.find(c => c.name === savedColor)
+    if (selectedTheme) {
+      const isDark = document.documentElement.classList.contains('dark')
+      const primaryColor = isDark ? selectedTheme.primaryDark : selectedTheme.primaryLight
+      document.documentElement.style.setProperty('--primary', primaryColor)
+      if (isDark) {
+        document.documentElement.style.setProperty('--sidebar-primary', primaryColor)
+      }
+    }
   }, [])
+
+  // 监听主题模式变化，同步更新颜色
+  React.useEffect(() => {
+    if (!mounted) return
+
+    const observer = new MutationObserver(() => {
+      const selectedTheme = themeColors.find(c => c.name === selectedColor)
+      if (selectedTheme) {
+        const isDark = document.documentElement.classList.contains('dark')
+        const primaryColor = isDark ? selectedTheme.primaryDark : selectedTheme.primaryLight
+        document.documentElement.style.setProperty('--primary', primaryColor)
+        if (isDark) {
+          document.documentElement.style.setProperty('--sidebar-primary', primaryColor)
+        }
+      }
+    })
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
+    return () => observer.disconnect()
+  }, [mounted, selectedColor])
 
   const handleColorChange = (colorName: string) => {
     setSelectedColor(colorName)
     localStorage.setItem('theme-color', colorName)
-    // 实际应用主题颜色需要更新 CSS 变量
-    document.documentElement.classList.forEach((cls) => {
-      if (cls.startsWith('theme-')) {
-        document.documentElement.classList.remove(cls)
-      }
-    })
-    document.documentElement.classList.add(`theme-${colorName}`)
+
+    // 找到选中的颜色配置
+    const selectedTheme = themeColors.find(c => c.name === colorName)
+    if (!selectedTheme) return
+
+    // 获取当前主题模式（light或dark）
+    const isDark = document.documentElement.classList.contains('dark')
+    const primaryColor = isDark ? selectedTheme.primaryDark : selectedTheme.primaryLight
+
+    // 动态更新CSS变量
+    document.documentElement.style.setProperty('--primary', primaryColor)
+
+    // 同时更新sidebar的primary颜色
+    if (isDark) {
+      document.documentElement.style.setProperty('--sidebar-primary', primaryColor)
+    }
   }
 
   if (!mounted) {
