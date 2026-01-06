@@ -61,7 +61,7 @@ export default forwardRef<{ setOpen: (open: boolean) => void }, ResourcePanelPro
           variant="ghost"
           size="icon"
           className={cn(
-            "fixed md:absolute right-4 top-[76px] z-50 transition-all",
+            "fixed md:absolute right-0 -translate-x-1/2 top-[10px] md:-top-14 z-50 transition-all ease-linear hover:bg-accent/50",
             isExpanded && "bg-accent"
           )}
           onClick={() => setIsExpanded(!isExpanded)}
@@ -73,63 +73,51 @@ export default forwardRef<{ setOpen: (open: boolean) => void }, ResourcePanelPro
         {isExpanded && (
           <div
             ref={overlayRef}
-            className="fixed inset-0 z-[48] bg-transparent"
-            style={{ left: "240px" }}
+            className="absolute w-[calc(100vw-300px)] h-[100vh] z-[48] bg-transparent"
           />
         )}
 
         {/* 资源面板 */}
         <div
           className={cn(
-            "fixed right-4 top-[120px] z-[49] transition-all duration-300",
-            "bg-background border border-border rounded-xl shadow-lg",
-            "w-[380px] max-h-[calc(100vh-140px)]",
+            "flex flex-col right-[17px] z-[49] absolute transition-all duration-300 h-[calc(100vh-80px)]",
+            "bg-background border py-[20px] border-[#E4E4E7] shadow-[0_6px_15px_0_rgba(0,0,0,0.08)] rounded-xl dark:border-[#27272A]",
             isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >
-          <div className="p-4 border-b">
-            <h3 className="font-semibold text-sm">历史消息</h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              共 {userMessages.length} 条消息
-            </p>
-          </div>
-
-          <div className="overflow-y-auto max-h-[calc(100vh-240px)] p-2">
-            {userMessages.length === 0 ? (
-              <div className="flex items-center justify-center h-32 text-sm text-muted-foreground">
-                暂无消息
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {userMessages.map((message, index) => (
-                  <div
-                    key={message.id}
-                    onClick={() => scrollToMessage(message.id)}
-                    className={cn(
-                      "p-3 rounded-lg cursor-pointer transition-colors",
-                      "hover:bg-accent text-sm",
-                      "border border-transparent hover:border-border"
-                    )}
-                  >
-                    <div className="flex items-start gap-2">
-                      <span className="text-xs text-muted-foreground shrink-0 mt-0.5">
-                        #{index + 1}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs line-clamp-2 break-words">
-                          {message.content}
-                        </p>
-                        {message.createTime && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {message.createTime}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div
+            className={cn(
+              "overflow-y-auto w-[calc(100vw-40px)] md:w-[380px]",
+              isExpanded ? "" : "hidden"
             )}
+          >
+            <div className="px-2 min-h-[200px]">
+              {userMessages.length === 0 ? (
+                <div className="flex items-center justify-center h-32 text-sm text-muted-foreground">
+                  暂无消息
+                </div>
+              ) : (
+                <div className="space-y-0.5">
+                  {userMessages.map((message, index) => (
+                    <div
+                      key={message.id}
+                      onClick={() => scrollToMessage(message.id)}
+                      className={cn(
+                        "flex items-center w-full group min-h-[24px] px-2 py-1 rounded cursor-pointer transition-colors",
+                        "hover:bg-muted"
+                      )}
+                    >
+                      <span
+                        className="flex-1 file-name truncate text-xs text-[#71717A] dark:text-[#A1A1AA]"
+                        title={message.content}
+                      >
+                        {message.content}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </>
