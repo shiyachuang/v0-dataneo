@@ -90,8 +90,7 @@ export default function ChatPage() {
       };
 
       setMessages((prev) => {
-        // 移除加载消息，添加真实 AI 回复
-        const withoutLoading = prev.filter((m) => !m.isLoading);
+        const withoutLoading = prev.filter((m) => m && !m.isLoading);
         return [...withoutLoading, aiMessage];
       });
     }, 1500);
@@ -106,7 +105,7 @@ export default function ChatPage() {
           className="overflow-y-auto flex-1"
           onScroll={handleScroll}
         >
-          {messages.map((message) => (
+          {messages.filter((m) => m).map((message) => (
             <Message key={message.id} message={message} />
           ))}
         </div>
@@ -117,7 +116,7 @@ export default function ChatPage() {
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full shadow-lg"
+              className="rounded-full shadow-lg bg-transparent"
               onClick={() => scrollToBottom()}
             >
               <ArrowDown className="h-4 w-4" />
@@ -131,7 +130,7 @@ export default function ChatPage() {
             value={inputValue}
             onChange={setInputValue}
             onSend={handleSend}
-            disabled={messages.some((m) => m.isLoading)}
+            disabled={messages.some((m) => m && m.isLoading)}
           />
         </div>
       </div>

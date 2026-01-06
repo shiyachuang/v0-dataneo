@@ -17,6 +17,11 @@ interface MessageProps {
 }
 
 export default function Message({ message }: MessageProps) {
+  if (!message) {
+    console.log("[v0] Message component received undefined message");
+    return null;
+  }
+
   const isUser = message.role === "user";
 
   const handleCopy = () => {
@@ -30,7 +35,7 @@ export default function Message({ message }: MessageProps) {
         // 用户消息（右对齐）
         <div className="flex justify-end mb-5">
           <div className="max-w-[66.6%] w-auto p-0">
-            <div className="rounded-lg px-4 py-3 bg-primary text-primary-foreground break-words">
+            <div className="rounded-lg px-3 py-2 bg-primary text-primary-foreground break-words text-sm">
               {message.content}
             </div>
           </div>
@@ -47,7 +52,7 @@ export default function Message({ message }: MessageProps) {
 
           {/* 消息内容 */}
           <div className="w-[calc(100%-48px)]">
-            <div className="rounded-lg px-4 py-3 bg-[#F7F7F8] dark:bg-[#27272A] break-words whitespace-pre-wrap">
+            <div className="rounded-lg px-3 py-2 bg-[#F7F7F8] dark:bg-[#27272A] break-words whitespace-pre-wrap text-sm">
               {message.isLoading ? (
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <IconLoader className="animate-spin h-4 w-4" />
