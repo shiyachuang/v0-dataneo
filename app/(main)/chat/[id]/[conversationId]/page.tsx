@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
-import Message from "./components/Message";
-import ChatInput from "./components/ChatInput";
+import Message from "../../components/Message";
+import ChatInput from "../../components/ChatInput";
 import {
   mockMessages,
   generateMockResponse,
@@ -12,7 +12,16 @@ import {
 } from "@/lib/mock/chat";
 import { nanoid } from "nanoid";
 
-export default function ChatPage() {
+interface WorkspaceConversationPageProps {
+  params: {
+    id: string;
+    conversationId: string;
+  };
+}
+
+export default function WorkspaceConversationPage({
+  params,
+}: WorkspaceConversationPageProps) {
   const [messages, setMessages] = useState<MessageType[]>(mockMessages);
   const [inputValue, setInputValue] = useState("");
   const [userScrolled, setUserScrolled] = useState(false);
